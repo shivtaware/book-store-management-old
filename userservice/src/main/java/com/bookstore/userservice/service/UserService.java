@@ -13,12 +13,8 @@ public class UserService {
     @Autowired
     UserRepository repository;
     public String register(User user) {
-        try {
-            repository.save(user);
-            return "Success!";
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+        repository.save(user);
+        return "Success!";
     }
 
     public User getUserById(int id) {
@@ -26,10 +22,15 @@ public class UserService {
     }
 
     public String login(String userName, String password) {
-        User user = repository.findByUserName(userName);
-        if (user.getPassword().equals(password))
-            return "Successfully Logged in!";
-        else
-            return "Incorrect Username or Password!";
+        try {
+            User user = repository.findByUserName(userName);
+            if (user.getPassword().equals(password))
+                return "Successfully Logged in!";
+            else
+                return "Incorrect Username or Password!";
+        } catch (Exception e) {
+            return "User not found for specified username";
+        }
+
     }
 }
